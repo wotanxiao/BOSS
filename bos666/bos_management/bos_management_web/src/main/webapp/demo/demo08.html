@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>基于ajax加载远程json数据构造ztree</title>
+<link rel="stylesheet" type="text/css"
+	href="../js/easyui/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css"
+	href="../js/easyui/themes/icon.css">
+<!-- 所有的JS插件都是依赖于JQuery,所以导入资源的时候,必须先导入jQuery -->
+<script type="text/javascript" src="../js/jquery-1.8.3.js"></script>
+<script type="text/javascript" src="../js/easyui/jquery.easyui.min.js"></script>
+<link rel="stylesheet" href="../js/ztree/zTreeStyle.css" type="text/css">
+<script type="text/javascript" src="../js/ztree/jquery.ztree.all-3.5.js"></script>
+<!-- 
+
+	easyui中所有的控件命名规则:easyui-控件名字
+	data-options : 设置控件的属性
+	title : 标题
+	iconCls : 指定图标,/js/easyui/themes/icon.css文件中定义了图标的名字
+	easyui中调用方法的方式 : $("#id").控件名字("方法名","调用方法时传入的参数")
+ -->
+<script type="text/javascript">
+	// 添加选项卡
+	function addTabs() {
+		// 判断要添加的选项卡是否存在
+		var result = $("#tt").tabs("exists", "新选项卡面板")
+		if (result) {
+			// 如果存在,选中
+			$("#tt").tabs("select", "新选项卡面板")
+		} else {
+			// 如果不存在,添加
+			// 添加一个未选中状态的选项卡面板
+			$('#tt').tabs('add', {
+				title : '新选项卡面板',
+				selected : true
+
+			});
+		}
+
+	}
+
+	// 在入口函数(页面加载完成后,自动加载的函数)中初始化ztree
+	$(function() {
+		// 参数1 :  节点的ID
+		// 参数2 :  ztree的配置参数
+		// 参数3 :  具体的树的数据
+		var setting = {
+			data : {
+				simpleData : {
+					enable : true
+				}
+			}
+		}
+	
+	
+	$.get("../data/menu.json",function(data){
+		$.fn.zTree.init($("#treeDemo"), setting, data);
+	})
+
+		
+	})
+</script>
+</head>
+<body class="easyui-layout">
+
+	<div data-options="region:'north'" style="height: 50px"></div>
+	<div data-options="region:'south',split:true" style="height: 50px;"></div>
+
+	<div data-options="region:'west',split:true" title="菜单栏"
+		style="width: 200px;">
+		<div class="easyui-accordion" data-options="fit:true,selected:1">
+			<div title="面板1">
+				<a id="btn" href="#" class="easyui-linkbutton" onclick="addTabs()"
+					data-options="iconCls:'icon-search'">添加选项卡</a>
+			</div>
+			<div title="面板2">
+
+				<ul id="treeDemo" class="ztree"></ul>
+			</div>
+			<div title="面板3">面板3</div>
+		</div>
+	</div>
+	<div data-options="region:'center',title:'内容区',iconCls:'icon-ok'">
+		<div id="tt" class="easyui-tabs" data-options="fit:true">
+			<div title="选项卡1">面板1</div>
+			<div title="选项卡2">面板2</div>
+			<div title="选项卡3">面板3</div>
+		</div>
+	</div>
+
+</body>
+</html>

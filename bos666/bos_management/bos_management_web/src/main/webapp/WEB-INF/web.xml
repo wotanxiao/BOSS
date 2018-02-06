@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	version="2.5">
+	<display-name>bos_management_web</display-name>
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+		<welcome-file>index.htm</welcome-file>
+		<welcome-file>index.jsp</welcome-file>
+		<welcome-file>default.html</welcome-file>
+		<welcome-file>default.htm</welcome-file>
+		<welcome-file>default.jsp</welcome-file>
+	</welcome-file-list>
+	<!-- 配置cxf框架 -->
+	<servlet>
+		<servlet-name>cxf</servlet-name>
+		<servlet-class>org.apache.cxf.transport.servlet.CXFServlet</servlet-class>
+	</servlet>
+
+	<!--
+		如果struts框架拦截规则是 /*,在引入cxf框架的时候一定要做修改,否则两个框架会有冲突
+	-->
+	<servlet-mapping>
+		<servlet-name>cxf</servlet-name>
+		<url-pattern>/webService/*</url-pattern>
+	</servlet-mapping>
+
+	<!-- 指定Spring框架配置文件的位置 -->
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath:applicationContext.xml</param-value>
+	</context-param>
+	<!-- 配置Spring框架的监听器 -->
+	<listener>
+		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+	</listener>
+
+	<!--
+		2.5的工程,filter的加载顺序就是按照web.xml中配置的顺序从上往下加载
+		3.0的工程,filter的加载顺序是按照类名的字典顺序加载
+	-->
+
+	<!--
+		listener 第一个被加载
+		filter 第二个被加载
+		servlet (第一次被访问)
+	-->
+	<!--
+		Spring提供的,用于整合shiro框架的
+		一定要写在Struts框架的前端控制器之前
+		本filter创建的时候,需要注入一个对象,这个对象必须声明在applicationContext.xml中,
+		而且这个对象的id必须和本filter的name保持一致
+	-->
+	<filter>
+		<filter-name>shiroFilterFactoryBean</filter-name>
+		<filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>shiroFilterFactoryBean</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<!-- 配置Struts的前端控制器 -->
+	<filter>
+		<filter-name>struts</filter-name>
+		<filter-class>org.apache.struts2.dispatcher.ng.filter.StrutsPrepareAndExecuteFilter</filter-class>
+	</filter>
+	<filter-mapping>
+		<filter-name>struts</filter-name>
+		<url-pattern>*.action</url-pattern>
+	</filter-mapping>
+
+</web-app>

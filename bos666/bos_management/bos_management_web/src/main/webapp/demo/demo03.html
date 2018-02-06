@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>accordion折叠面板/tabs选项卡面板</title>
+<link rel="stylesheet" type="text/css"
+	href="../js/easyui/themes/default/easyui.css">
+<link rel="stylesheet" type="text/css"
+	href="../js/easyui/themes/icon.css">
+<!-- 所有的JS插件都是依赖于JQuery,所以导入资源的时候,必须先导入jQuery -->
+<script type="text/javascript" src="../js/jquery-1.8.3.js"></script>
+<script type="text/javascript" src="../js/easyui/jquery.easyui.min.js"></script>
+<!-- 
+
+	easyui中所有的控件命名规则:easyui-控件名字
+	data-options : 设置控件的属性
+	title : 标题
+	iconCls : 指定图标,/js/easyui/themes/icon.css文件中定义了图标的名字
+ -->
+</head>
+<body class="easyui-layout">
+
+	<div data-options="region:'north'" style="height: 50px"></div>
+	<div data-options="region:'south',split:true" style="height: 50px;"></div>
+
+	<div data-options="region:'west',split:true" title="菜单栏"
+		style="width: 200px;">
+		<div class="easyui-accordion" data-options="fit:true">
+			<div title="面板1">面板1</div>
+			<div title="面板2">面板2</div>
+			<div title="面板3">面板3</div>
+		</div>
+	</div>
+	<div data-options="region:'center',title:'内容区',iconCls:'icon-ok'">
+		<div class="easyui-tabs" data-options="fit:true">
+			<div title="选项卡1">面板1</div>
+			<div title="选项卡2">面板2</div>
+			<div title="选项卡3">面板3</div>
+		</div>
+	</div>
+
+</body>
+</html>
